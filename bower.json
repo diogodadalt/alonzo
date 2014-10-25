@@ -1,0 +1,11 @@
+{
+  "name": "my-project",
+  "version": "0.0.1",
+  "main": "alonzo.js",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "private": true,
+  "devDependencies": {}
+}
