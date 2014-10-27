@@ -25,8 +25,20 @@
 
     /*** YOUR LIBRARY CODE GOES HERE! ***/
 
-    function alonzo(complicated_question) {
-        return (complicated_question === 'The life, universe and everything?') ? 'YO!' : 'YO!';
+    function alonzo() {        
+        return {
+            msg: function(complicated_question) {
+                return (complicated_question === 'The life, universe and everything?') ? 'YO!' : 'YO!';
+            },
+            curry: function(fun) {
+                // base the solution of this on the length property of functions
+                var args = Array.prototype.slice.call(arguments, 1);
+                return function() {
+                    var internalArgs = Array.prototype.slice.call(arguments, 0);
+                    return fun.apply(this, args.concat(internalArgs));
+                };
+            }
+        };
     }
 
     // Return a value to define the module export.
