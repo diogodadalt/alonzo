@@ -1,6 +1,6 @@
 /*global module:false*/
 module.exports = function(grunt) {
-
+  'use strict';
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
             ui: 'bdd',
             reporter: 'tap'
         },
-        all: { src: ['tests/*.js'] }
+        all: { src: ['test/*.js'] }
     },
     jshint: {
       files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
