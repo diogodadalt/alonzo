@@ -27,24 +27,18 @@
 
     function Alonzo() {
       return {
-        msg: function(complicated_question) {
-          return (complicated_question === 'The life, universe and everything?') ? 'YO!' : 'YO!';
-        },
         curry: function(fun) {
           // base the solution of this on the length property of functions
           var args = Array.prototype.slice.call(arguments, 1),
             applicableFunction = function() {
               var internalArgs = Array.prototype.slice.call(arguments, 0);
-              
-              args = args.concat(internalArgs);
-              //console.log(args);
-              //console.log(args.length);
-              //console.log(fun.length);
-              if (args.length === fun.length) {
-                return fun.apply(this, args);
-              } else {
-                return applicableFunction;
-              }
+
+              if ((args.length + internalArgs.length) === fun.length) {
+                return fun.apply(this, args.concat(internalArgs));
+              } else if ((args.length + internalArgs.length) < fun.length) {
+                args = args.concat(internalArgs);
+              }  
+              return applicableFunction;              
           };
 
           return applicableFunction();

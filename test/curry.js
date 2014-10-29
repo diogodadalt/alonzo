@@ -1,20 +1,19 @@
 /**
  * alonzo
  *
- *    Library test
+ *    Currying functionality
+ * Requirements:
+ * - handle receiving only a function
+ * - handle receiving a function with less parameters than the total supported by the function (partial application)
+ * - handle receiving a function with all the parameters supported by the function (application)
+ * - handle arguments separated by comma and parenthesis
+ * - handle successive partial application of functions
  */
 
 'use strict';
 
 var assert = require('assert'),
 lib = require('../src/alonzo');
-
-describe('Basic library test', function() {
-	it('should answer all questions with YO!', function() {
-		var answer = lib.Alonzo().msg('Should I tickle this unicorn?');
-		assert.equal(answer, 'YO!');
-	});
-});
 
 describe('Curry test: only the function as parameter', function() {
 	it('should curry a function with variable ammount of arguments', function() {
@@ -37,7 +36,7 @@ describe('Curry test: function and one argument as parameter separated by comma 
   });
 });
 
-describe('function and all arguments as parameter separated by comma (total application)', function() {
+describe('function and all arguments as parameter separated by comma (application)', function() {
   it('should curry a function with variable ammount of arguments', function() {
     var add = function(a, b) { return a + b; },
       answer = lib.Alonzo().curry(add, 1, 2);
@@ -56,11 +55,23 @@ describe('Curry test: function and one argument as parameter separated by parent
   });
 });
 
-describe('Curry test: function and all arguments as parameter separated by parenthesis (total application)', function() {
+describe('Curry test: function and all arguments as parameter separated by parenthesis (application)', function() {
   it('should curry a function with variable ammount of arguments', function() {
     var add = function(a, b) { return a + b; },
-    answer = lib.Alonzo().curry(add)(1)(2);
+      answer = lib.Alonzo().curry(add)(1)(2);
 
     assert.equal(answer, 3);
+  });
+});
+
+describe('Curry test: multiple calls to a curried function', function() {
+  it('should curry a function with variable ammount of arguments', function() {
+    var add = function(a, b) { return a + b; },
+      add1 = lib.Alonzo().curry(add)(1);
+
+    assert.equal(add1(2), 3);
+    assert.equal(add1(2), 3);
+    assert.equal(add1(3), 4);
+    assert.equal(add1(4), 5);
   });
 });
