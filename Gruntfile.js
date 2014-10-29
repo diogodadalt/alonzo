@@ -23,14 +23,14 @@ module.exports = function(grunt) {
       }
     },
     simplemocha: {
-        options: {
-            globals: ['expect'],
-            timeout: 3000,
-            ignoreLeaks: false,
-            ui: 'bdd',
-            reporter: 'tap'
-        },
-        all: { src: ['test/*.js'] }
+      options: {
+        globals: ['expect'],
+        timeout: 3000,
+        ignoreLeaks: false,
+        ui: 'bdd',
+        reporter: 'tap'
+      },
+      all: { src: ['test/*.js'] }
     },
     jshint: {
       files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
