@@ -11,10 +11,10 @@
     "esnext": true,
     "bitwise": true,
     "camelcase": false,
-    "curly": true,
+    "curly": false,
     "eqeqeq": true,
     "immed": true,
-    "indent": 4,
+    "indent": 2,
     "latedef": true,
     "newcap": true,
     "noarg": true,
@@ -24,5 +24,6 @@
     "strict": true,
     "trailing": true,
     "smarttabs": true,
-    "white": true
+    "white": true,
+    "quotmark": "single"
 }

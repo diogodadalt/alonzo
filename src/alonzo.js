@@ -33,16 +33,37 @@
             applicableFunction = function() {
               var internalArgs = Array.prototype.slice.call(arguments, 0);
               
-              if (internalArgs.length >= fun.length) {
+              if (internalArgs.length >= fun.length)
                 return fun.apply(this, internalArgs);
-              }
-
+              
               return function() {
                 return applicableFunction.apply(this, internalArgs.concat(Array.prototype.slice.call(arguments, 0)));
               };
           };
 
           return applicableFunction.apply(this, args);
+        },
+        compose: function(f, g) {
+          return function() {
+            return f(g.apply(this, arguments));
+          };
+        },
+        compose2: function() {
+          var functions = arguments;
+          
+          return function() {
+            var i,
+              result;
+
+            for (i = functions.lentgh - 1; i >= 0; i--) {
+              if (i === functions.lentgh - 1)
+                result = functions[i].apply(this, arguments);
+              else
+                result = functions[i].call(this, result);
+            }
+
+            return result;
+          };
         }
       };
     }
