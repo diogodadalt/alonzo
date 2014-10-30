@@ -32,16 +32,17 @@
           var args = Array.prototype.slice.call(arguments, 1),
             applicableFunction = function() {
               var internalArgs = Array.prototype.slice.call(arguments, 0);
+              
+              if (internalArgs.length >= fun.length) {
+                return fun.apply(this, internalArgs);
+              }
 
-              if ((args.length + internalArgs.length) === fun.length) {
-                return fun.apply(this, args.concat(internalArgs));
-              } else if ((args.length + internalArgs.length) < fun.length) {
-                args = args.concat(internalArgs);
-              }  
-              return applicableFunction;              
+              return function() {
+                return applicableFunction.apply(this, internalArgs.concat(Array.prototype.slice.call(arguments, 0)));
+              };
           };
 
-          return applicableFunction();
+          return applicableFunction.apply(this, args);
         }
       };
     }
@@ -50,16 +51,5 @@
     // This example returns as functions, but the module
     // can return an object as the exported value.
     return Alonzo;
-  }));
-
-
-/*'use strict'
-
-;(function() {
-  return function() {
-    var Monad = {};
-    Monad.prototype.unit = function(value) {
-
-    };
-  };  
-}.call(this));*/
+  })
+);
