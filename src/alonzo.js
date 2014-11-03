@@ -43,25 +43,27 @@
 
           return applicableFunction.apply(this, args);
         },
-        compose: function(f, g) {
-          return function() {
-            return f(g.apply(this, arguments));
-          };
-        },
-        compose2: function() {
-          var functions = arguments;
+        compose: function() {
+          var functions = arguments,
+            that = this;
           
           return function() {
             var i,
-              result;
+              result,
+              args = arguments;
 
-            for (i = functions.lentgh - 1; i >= 0; i--) {
-              if (i === functions.lentgh - 1)
-                result = functions[i].apply(this, arguments);
-              else
-                result = functions[i].call(this, result);
+            if (functions.length > 0 && functions[functions.length-1].length > arguments.length) {
+              return function internalCompose() { // fix this
+                that.curry.apply(that, [functions[functions.length-1]].concat(Array.prototype.slice.call(args, 0)));
+              };
+            } else {
+              for (i = functions.length - 1; i >= 0; i--) {
+                if (i === functions.length - 1)
+                  result = that.curry.apply(this, [functions[i]].concat(Array.prototype.slice.call(arguments, 0)));//functions[i].apply(this, arguments);
+                else
+                  result = functions[i].call(this, result);
+              }
             }
-
             return result;
           };
         }
