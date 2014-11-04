@@ -20,7 +20,7 @@ describe('Composition test: only the function as parameter', function() {
   });
 });
 
-describe('Composition test: only the function as parameter and using the result with currying', function() {
+describe('Composition test: function as parameter and using the result with currying', function() {
   it('should compose functions according with the order they are passed.', function() {
     var add = function(a, b) { return a + b; },
       multiplyBy3 = function(a) { return a * 3; },
