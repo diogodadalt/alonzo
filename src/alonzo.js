@@ -26,66 +26,7 @@
     /*** YOUR LIBRARY CODE GOES HERE! ***/
 
     function Alonzo() {
-      function arraySlice(arr, pos) {
-        return Array.prototype.slice.call(arr, pos);
-      }
-
-      function curryWithCallback(fun, callback) {
-        var args = arraySlice(arguments, 2),
-          applicableFunction = function() {
-            var internalArgs = arraySlice(arguments, 0);
-            
-            console.log(!!callback ? callback.length: "");
-
-            if (internalArgs.length >= fun.length) {
-              if (!!callback)
-                return callback(fun.apply(this, internalArgs));
-              else
-                return fun.apply(this, internalArgs);
-            }
-            
-            return function() {
-              console.log(!!callback ? callback.length: "");
-              return applicableFunction.apply(this, internalArgs.concat(arraySlice(arguments, 0)));
-            };
-        };
-
-        return applicableFunction.apply(this, args);
-      }
-
-      function composeWithNoApplication() {
-        var functions = arguments,
-            that = this;
-          
-        return function() {
-          var i,
-            result,
-            args = arguments;
-
-          if (functions.length > 0 && functions[functions.length-1].length > arguments.length) {
-            return curryWithCallback.apply(that, [functions[functions.length-1]].
-              concat(arraySlice(args, 0)), function cb(res) {
-                for (i = functions.length - 1; i >= 0; i--) {
-                  if (i === functions.length - 1)
-                    continue;
-                  else
-                    res = functions[i].call(this, res);
-                }
-                return res;
-            });              
-          } else {
-            for (i = functions.length - 1; i >= 0; i--) {
-              if (i === functions.length - 1)
-                result = functions[i].apply(this, arraySlice(arguments, 0)); //functions[i].apply(this, arguments);
-              else
-                result = functions[i].call(this, result);
-            }
-          }
-          return result;
-        };
-      }
-
-      return {
+      var API = {
         tuple: function() {
           var n = arguments.length,
             i,
@@ -100,56 +41,65 @@
           return t;
         },
         curry: function(fun) {
-          // base the solution of this on the length property of functions
-          /*var args = arraySlice(arguments, 1),
-            applicableFunction = function() {
-              var internalArgs = arraySlice(arguments, 0);
-              
-              if (internalArgs.length >= fun.length) {
-                return fun.apply(this, internalArgs);
-              }
-              
-              return function() {
-                return applicableFunction.apply(this, internalArgs.concat(arraySlice(arguments, 0)));
-              };
-          };
-
-          return applicableFunction.apply(this, args);*/
           console.log([fun, null].concat(arraySlice(arguments, 1)));
-          return curryWithCallback.apply(this, [fun, null].concat(arraySlice(arguments, 1)));
+          return curryWithCallback.apply(API, [fun, null].concat(arraySlice(arguments, 1)));
         },
         compose: function() {
-          var functions = arguments,
-            that = this;
+          var functions = arguments;
           
           return function() {
-            var i,
-              result,
+            var result,
               args = arguments;
 
-            if (functions.length > 0 && functions[functions.length-1].length > arguments.length) {
-              return curryWithCallback.apply(that, [functions[functions.length-1]].
-                concat(arraySlice(args, 0)), function cb(res) {
-                  for (i = functions.length - 1; i >= 0; i--) {
-                    if (i === functions.length - 1)
-                      continue;
-                    else
-                      res = functions[i].call(this, res);
-                  }
-                  return res;
-              });              
-            } else {
-              for (i = functions.length - 1; i >= 0; i--) {
-                if (i === functions.length - 1)
-                  result = functions[i].apply(this, arraySlice(arguments, 0)); //functions[i].apply(this, arguments);
-                else
-                  result = functions[i].call(this, result);
+            if (functions.length > 0) {
+              if (functions[functions.length-1].length > arguments.length) {
+                return curryWithCallback.apply(API, [functions[functions.length-1]].concat([function(res) {
+                    return applyValueToComposedFunctions.apply(API, [res].concat(arraySlice(functions, 0, -1)));
+                }]).concat(arraySlice(args, 0)));              
+              } else {
+                result = functions[functions.length - 1].apply(API, arraySlice(arguments, 0));
+                result = applyValueToComposedFunctions.apply(API, [result].concat(arraySlice(functions, 0, -1)));                
               }
             }
             return result;
           };
         }
       };
+
+      function arraySlice(arr, begin, end) {
+        return Array.prototype.slice.call(arr, begin, end);
+      }
+
+      function curryWithCallback(fun, callback) {
+        var args = arraySlice(arguments, 2),
+          applicableFunction = function() {
+            var internalArgs = arraySlice(arguments, 0);
+
+            if (internalArgs.length >= fun.length) {
+              if (!!callback)
+                return callback(fun.apply(API, internalArgs));
+              else
+                return fun.apply(API, internalArgs);
+            }
+            
+            return function() {
+              return applicableFunction.apply(API, internalArgs.concat(arraySlice(arguments, 0)));
+            };
+        };
+
+        return applicableFunction.apply(API, args);
+      }
+
+      function applyValueToComposedFunctions(result) {
+        var functions = arraySlice(arguments, 1),
+          i;
+        for (i = functions.length - 1; i >= 0; i--) {
+            result = functions[i].call(API, result);
+        }
+        return result;
+      }
+
+      return API;
     }
 
     // Return a value to define the module export.
