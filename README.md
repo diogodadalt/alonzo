@@ -5,4 +5,4 @@
 	/_/  |_/_/\____/_/ /_/ /___/\____(_)_/ /____/  
 	                                  /___/     
 
-=======================================================
+Alonzo.js was created initially to exercise the functional paradigm concepts and for my personal use. But feel free to give it a try. 
