@@ -1,13 +1,13 @@
 {
   "name": "alonzo",
   "version": "0.0.1",
-  "description": "fp lib",
+  "description": "Go functional with your JavaScript. Use currying, composition, Functors, Monads and so on.",
   "main": "Gruntfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Diogo Rigolli Dadalt",
-  "license": "ISC",
+  "author": "Diogo Rigolli Dadalt <diogodadalt@gmail.com",
+  "license": "MIT",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-concat": "^0.5.0",
