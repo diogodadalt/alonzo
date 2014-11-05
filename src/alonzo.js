@@ -41,7 +41,6 @@
           return t;
         },
         curry: function(fun) {
-          console.log([fun, null].concat(arraySlice(arguments, 1)));
           return curryWithCallback.apply(API, [fun, null].concat(arraySlice(arguments, 1)));
         },
         compose: function() {
