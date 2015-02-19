@@ -1,14 +1,40 @@
 /*global module:false*/
 module.exports = function(grunt) {
   'use strict';
+
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    browserify: {
+      dist: {
+        files: {
+          'build/app.js': ['build/src/*.js'],
+        }
+      }
+    },
+    traceur: {
+      options: {
+        copyRuntime: 'build',
+        modules: 'commonjs',
+        blockBinding: true,
+        experimental: true
+      },
+      custom: {
+        files: [{
+          expand: true,
+          cwd: '',
+          src: ['src/*.js'],
+          dest: 'build'
+        }]
+      },
+    },
     concat: {
       options: {
         separator: ';'
       },
       dist: {
-        src: ['src/**/*.js'],
+        src: ['build/src/**/*.js'],
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
@@ -42,12 +68,8 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-simple-mocha');
-  grunt.loadNpmTasks('grunt-contrib-watch');  
-
-  grunt.registerTask('test', ['jshint', 'simplemocha']);
+  grunt.registerTask('test', ['jshint', 'traceur', 'browserify', 'simplemocha']);
+  grunt.registerTask('compile', ['jshint', 'traceur', 'browserify', 
+    'simplemocha', 'concat', 'uglify']);  
   grunt.registerTask('default', ['jshint', 'simplemocha', 'concat', 'uglify']);
 };
