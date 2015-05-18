@@ -8,7 +8,7 @@
 
 ## Overview
 
-Alonzo.js is intended to provide functional features. It was created initially to exercise the functional paradigm concepts and for my personal use. But feel free to give it a try. 
+Alonzo.js is intended to provide functional features to Javacript. It was created initially to exercise the functional paradigm concepts along with Ecmacript 6 and for my personal use. But feel free to give it a try. 
 
 ## Examples
 
